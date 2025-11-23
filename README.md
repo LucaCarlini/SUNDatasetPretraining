@@ -97,7 +97,7 @@ All commands are executed from the repo root. Key flags exposed by `PreTrainBBox
 ### Pretraining schema
 The teacher–student loop is illustrated below; the teacher consumes bbox crops while the student sees the full image and is trained to match the teacher CLS tokens before supervised fine-tuning.
 
-![Pretraining schema](figures/schema_REBUTTAL.png)
+![Pretraining schema](figures/schema_REBUTTAL.pdf)
 
 ## Outputs & Logging
 - `store_name/` contains checkpoints, attention overlays, Tensor/CSV logs (balanced accuracy, CLS-in/outside metrics), and the serialized argument file (`args.json`).
