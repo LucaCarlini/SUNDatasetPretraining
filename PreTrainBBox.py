@@ -715,11 +715,7 @@ if __name__ == '__main__':
                         help='Model name for classification (e.g., "vit-b16-224-in21k")')
     # make me choose if 2 or 3 classes
     parser.add_argument('--num_classes', type=int, default=3, help='Number of classes for classification')
-    # inside_weight=1.0, outside_weight=1.0
-    parser.add_argument('--penalize_outside', action='store_true', help='Penalize outside-bbox attention in Overlap Loss')
-    parser.add_argument('--inside_weight', type=float, default=1.0, help='Weight for inside-bbox attention in Overlap Loss')
-    parser.add_argument('--outside_weight', type=float, default=1.0, help='Weight for outside-bbox attention in Overlap Loss')
-
+    
 
 
     args = parser.parse_args()
@@ -827,7 +823,7 @@ if __name__ == '__main__':
     
     
         print('Using Attention Overlap Loss pretraining')
-        overlap_loss_fn = AttentionOverlapLoss(target_size=(224, 224), penalize_outside=args.penalize_outside, inside_weight=args.inside_weight, outside_weight=args.outside_weight)
+        overlap_loss_fn = AttentionOverlapLoss(target_size=(224, 224))
         pretrain_bbox_classifier_overlap(args, student_model, pretrain_dataloader, pretrain_val_dataloader, pretrain_optimizer, pretrain_scheduler, overlap_loss_fn)
         state_dict_path = os.path.join(store_path, 'best_model_pretrain_overlap_only.pth')
 
