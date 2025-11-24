@@ -715,6 +715,7 @@ if __name__ == '__main__':
                         help='Model name for classification (e.g., "vit-b16-224-in21k")')
     # make me choose if 2 or 3 classes
     parser.add_argument('--num_classes', type=int, default=3, help='Number of classes for classification')
+    parser.add_argument('--deactivate_normalization', action='store_true', help='Deactivate L1 normalization in the attention pretraining loss')
     
 
 
@@ -823,7 +824,7 @@ if __name__ == '__main__':
     
     
         print('Using Attention Overlap Loss pretraining')
-        overlap_loss_fn = AttentionOverlapLoss(target_size=(224, 224))
+        overlap_loss_fn = AttentionOverlapLoss(target_size=(224, 224), deactivate_normalization=args.deactivate_normalization)
         pretrain_bbox_classifier_overlap(args, student_model, pretrain_dataloader, pretrain_val_dataloader, pretrain_optimizer, pretrain_scheduler, overlap_loss_fn)
         state_dict_path = os.path.join(store_path, 'best_model_pretrain_overlap_only.pth')
 

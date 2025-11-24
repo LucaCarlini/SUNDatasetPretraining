@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import numpy as np
 
 class AttentionOverlapLoss(nn.Module):
-    def __init__(self, target_size=(224, 224)):
+    def __init__(self, target_size=(224, 224), deactivate_normalization=False):
         """
         Args:
             target_size (tuple): Size (H, W) to which attention maps and bboxes are expected.
@@ -12,6 +12,7 @@ class AttentionOverlapLoss(nn.Module):
         """
         super().__init__()
         self.H, self.W = target_size
+        self.deactivate_normalization = deactivate_normalization
 
         
 
@@ -32,7 +33,8 @@ class AttentionOverlapLoss(nn.Module):
         attn_map = attn_map.view(B, -1)
         attn_map = (attn_map - attn_map.min(dim=1, keepdim=True)[0]) / \
                    (attn_map.max(dim=1, keepdim=True)[0] - attn_map.min(dim=1, keepdim=True)[0] + 1e-8)
-        attn_map = attn_map / (attn_map.sum(dim=1, keepdim=True) + 1e-8)
+        if not self.deactivate_normalization:
+            attn_map = attn_map / (attn_map.sum(dim=1, keepdim=True) + 1e-8)
         attn_map = attn_map.view(B, H, W)
 
         masks = torch.zeros_like(attn_map)
